@@ -44,7 +44,7 @@ export default function SignUp({ navigation }: SignupScreenProps) {
   //-----------On Submit Actions -----------//
   function submit() {
     if (!data.Email || !data.Password) {
-      setSubmitMessage("Fill the remaining fields");
+      setSubmitMessage("Please Fill the remaining fields");
       setTimeout(() => setSubmitMessage(" "), 1500);
       return;
     }
@@ -125,7 +125,7 @@ export default function SignUp({ navigation }: SignupScreenProps) {
   // }
 
   //---------Comparing passwords ---------//
-  function comparePassword(PasswordConfirm:string) {
+  function comparePassword(PasswordConfirm: string) {
     if (data.Password != "" && PasswordConfirm != "") {
       if (data.Password == PasswordConfirm) {
         setMessage("Password Match");
