@@ -1,0 +1,11 @@
+  //-----------Phone regex--------//
+  // function checkPhone(key: string, value: string) {
+  //   const phoneRegex = /^[0-9]+$/;
+
+  //   setData((prev) => ({
+  //     ...prev,
+  //     [key]: phoneRegex.test(value) ? value : "",
+  //   }));
+  // }
+
+ 
