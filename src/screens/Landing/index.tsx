@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import SignUp from "../SignUp";
+import Login from "../Login";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParams } from "../../types/RootStackParams";
 import styles from "./styles";

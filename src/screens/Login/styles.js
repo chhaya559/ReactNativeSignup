@@ -24,14 +24,6 @@ const styles = StyleSheet.create({
     marginBottom : 50,
     textAlign : "center",
   },
-  inputs : {
-    borderWidth : 1.5,
-    padding : 20,
-    margin  : 10,
-    borderRadius : 10,
-    backgroundColor : "#F1F5F9",
-    borderColor : "#F1F5F9"
-  },
   isFocused : {
     borderColor : "#1E40AF"
   },
