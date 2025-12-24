@@ -1,4 +1,5 @@
 import { ReactElement, useState } from "react";
+import { normalizeEmail } from "../../utils/utils";
 import {
   StyleSheet,
   Text,
@@ -73,25 +74,19 @@ export default function SignUp({ navigation }: SignupScreenProps) {
     //     console.log("error: " + e);
     //   }
     // };
-    const storeData = async (data: any) => {
-      try {
-        const jsonValue = JSON.stringify(data);
-        const key = data.Email;
-
-        await AsyncStorage.setItem(key, jsonValue);
-        console.log("Data Stored");
-        //   const storedData = await AsyncStorage.getItem(key);
-        //   if (!storedData) {
-        //     console.log("No data found");
-        //   } else {
-        //     console.log("data stored", JSON.parse(storedData));
-        //   }
-      } catch (e) {
-        console.log("Error in storing data : " + e);
-      }
+    const storeData = async () => {
+      const key = normalizeEmail(data.Email);
+      await AsyncStorage.setItem(
+        key,
+        JSON.stringify({
+          Email : key,
+          Password : data.Password
+        })
+      );
+      console.log("User saved with key ", key);
     };
 
-    storeData(data);
+    storeData();
     setData({
       Name: "",
       Email: "",

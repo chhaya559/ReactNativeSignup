@@ -18,17 +18,25 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
   const [otp, setOtp] = useState("");
   const [generatedotp, setgeneratedOtp] = useState<string>("");
   const [visible, setVisibility] = useState(false);
-  const [emailVisibility,setEmailVisibility] = useState(true)
+  const [emailVisibility, setEmailVisibility] = useState(true);
 
-async  function getOtp() {
+  async function getOtp() {
     const isEmail = await AsyncStorage.getItem(email);
     if (!isEmail) {
       Alert.alert("Email is not registered");
-    } 
+    }
     const otpValue = Math.ceil(Math.random() * 10000).toString();
     setgeneratedOtp(otpValue);
-    setVisibility(true)
-    setEmailVisibility(false)
+    setVisibility(true);
+    setEmailVisibility(false);
+    Toast.show({
+      text1: "your otp is " + otpValue,
+    });
+  }
+  async function resendOtp() {
+    setOtp("");
+    const otpValue = Math.ceil(Math.random() * 10000).toString();
+    setgeneratedOtp(otpValue);
     Toast.show({
       text1: "your otp is " + otpValue,
     });
@@ -52,21 +60,21 @@ async  function getOtp() {
   }
   return (
     <View style={styles.container}>
-     {emailVisibility && (
-     <><TextInput
-        placeholder={"Enter your email"}
-        placeholderTextColor={"#94A3B8"}
-        value={email}
-        onChangeText={(e) => setEmail(e)}
-        autoCapitalize="none"
-      />
-      {emailError && <Text>emailError</Text>}
-      <TouchableOpacity onPress={getOtp} style={styles.button}>
-        <Text style={styles.text}>Get OTP</Text>
-      </TouchableOpacity>
-      </> 
-      )
-}
+      {emailVisibility && (
+        <>
+          <TextInput
+            placeholder={"Enter your email"}
+            placeholderTextColor={"#94A3B8"}
+            value={email}
+            onChangeText={(e) => setEmail(e)}
+            autoCapitalize="none"
+          />
+          {emailError && <Text>emailError</Text>}
+          <TouchableOpacity onPress={getOtp} style={styles.button}>
+            <Text style={styles.text}>Get OTP</Text>
+          </TouchableOpacity>
+        </>
+      )}
       {visible && (
         <>
           <View style={styles.otp}>
@@ -78,6 +86,9 @@ async  function getOtp() {
           </View>
           <Pressable onPress={compareOTP} style={styles.button}>
             <Text style={styles.text}>Submit OTP</Text>
+          </Pressable>
+          <Pressable onPress={resendOtp} style={styles.button}>
+            <Text style={styles.text}>Resend OTP</Text>
           </Pressable>
         </>
       )}

@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
+import { store } from "../../store";
 import {
   Alert,
   Pressable,
@@ -13,7 +14,10 @@ import { RootStackParams } from "../../types/RootStackParams";
 import styles from "./styles";
 import ThirdParty from "../../components/atoms/ThirdParty/index";
 import TextInput from "../../components/atoms/TextInput";
-import ForgotPassword from "../ForgotPassword";
+import { useDispatch } from "react-redux";
+import { login } from "../../slice/AuthSlice";
+import { AppDispatch } from "../../store";
+import { normalizeEmail } from "../../utils/utils";
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParams, "Login">;
 
@@ -23,7 +27,11 @@ export default function Login({ navigation }: LoginScreenProps) {
     Email: "",
     Password: "",
   });
+  const dispatch = useDispatch<AppDispatch>();
 
+  function generateToken() {
+    return Math.random().toString(36).substring(2, 7);
+  }
   function submit() {
     if (!loginData.Email.trim() || !loginData.Password.trim()) {
       Alert.alert("Please fill the data first");
@@ -31,24 +39,27 @@ export default function Login({ navigation }: LoginScreenProps) {
     }
 
     const getData = async () => {
-      const key = loginData.Email;
+      const key = normalizeEmail(loginData.Email);
+
       const user = await AsyncStorage.getItem(key);
+      console.log("User found:", user);
 
       if (!user) {
         Alert.alert("No such user");
         return;
       } else {
         const jsonValue = JSON.parse(user);
-        console.log(key);
-        console.log(jsonValue);
-      
-        console.log(loginData.Password);
-        console.log(jsonValue.Password)
         if (loginData.Password == jsonValue.Password) {
-          navigation.navigate("Home", {
-            username: jsonValue.FirstName,
-            Email: jsonValue.Email,
-          });
+          const token = generateToken();
+          console.log(token);
+          dispatch(
+            login({
+              user: { email: loginData.Email },
+              token,
+            })
+          );
+    
+    
         } else {
           Alert.alert("Please check your credentials");
         }
@@ -94,6 +105,7 @@ export default function Login({ navigation }: LoginScreenProps) {
           onBlur={() => {
             checkEmail("Email", loginData.Email);
           }}
+          autoCapitalize="none"
         />
         {emailError && <Text>{emailError}</Text>}
         <TextInput
