@@ -4,22 +4,25 @@ import { RootStackParams } from "./types/RootStackParams";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import { persistor, store } from "./store";
 import AppNavigator from "./navigation/AppNavigator";
+import { PersistGate } from "redux-persist/integration/react";
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 
 export default function App() {
   return (
     <Provider store={store}>
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }}>
-        <NavigationContainer>
-          <AppNavigator />
-        </NavigationContainer>
-      </SafeAreaView>
-      <Toast />
-    </SafeAreaProvider>
+      <PersistGate persistor={persistor}>
+        <SafeAreaProvider>
+          <SafeAreaView style={{ flex: 1 }}>
+            <NavigationContainer>
+              <AppNavigator />
+            </NavigationContainer>
+          </SafeAreaView>
+          <Toast />
+        </SafeAreaProvider>
+      </PersistGate>
     </Provider>
   );
 }
