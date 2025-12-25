@@ -18,6 +18,7 @@ import styles from "./style";
 import { SignupTypes } from "../../types/SignupTypes";
 import ThirdParty from "../../components/atoms/ThirdParty";
 import TextInput from "../../components/atoms/TextInput";
+import {mmkv} from "../../storage/mmkv";
 
 
 type SignupScreenProps = NativeStackScreenProps<RootStackParams, "Signup">;
@@ -53,40 +54,27 @@ export default function SignUp({ navigation }: SignupScreenProps) {
       return;
     }
     //-------------------------Storing Data -------------------//
+   
     // const storeData = async () => {
-    //   const name: [string, string] = ["FirstName", data.FirstName];
-    //   const lastNamme: [string, string] = ["LastName", data.LastName];
-    //   const Email: [string, string] = ["email", data.email];
-    //   const phone: [string, string] = ["PhoneNumber", data.PhoneNumber];
-    //   const password: [string, string] = ["Password", data.Password];
-    //   const dob: [string, string] = ["DOB", FormattedDate];
-    //   try {
-    //     await AsyncStorage.multiSet([
-    //       name,
-    //       lastNamme,
-    //       Email,
-    //       phone,
-    //       password,
-    //       dob,
-    //     ]);
-    //     console.log("Data Saved Successfully");
-    //   } catch (e) {
-    //     console.log("error: " + e);
-    //   }
+    //   await AsyncStorage.setItem(
+    //     key,
+    //     JSON.stringify({
+    //       Email : key,
+    //       Password : data.Password
+    //     })
+    //   );
+    //   console.log("User saved with key ", key);
     // };
-    const storeData = async () => {
-      const key = normalizeEmail(data.Email);
-      await AsyncStorage.setItem(
-        key,
-        JSON.stringify({
-          Email : key,
-          Password : data.Password
-        })
-      );
-      console.log("User saved with key ", key);
-    };
+    // storeData();
 
-    storeData();
+     const key = normalizeEmail(data.Email);
+
+    mmkv.set(key,
+      JSON.stringify({
+        Email : key,
+        Password : data.Password
+      })
+    )
     setData({
       Name: "",
       Email: "",

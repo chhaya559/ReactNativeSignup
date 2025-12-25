@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../slice/AuthSlice";
 import { AppDispatch } from "../../store";
 import { normalizeEmail } from "../../utils/utils";
+import { mmkv } from "../../storage/mmkv";
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParams, "Login">;
 
@@ -38,18 +39,16 @@ export default function Login({ navigation }: LoginScreenProps) {
       return;
     }
 
-    const getData = async () => {
       const key = normalizeEmail(loginData.Email);
 
-      const user = await AsyncStorage.getItem(key);
+      const user = mmkv.getString(key);
       console.log("User found:", user);
-
       if (!user) {
         Alert.alert("No such user");
         return;
       } else {
-        const jsonValue = JSON.parse(user);
-        if (loginData.Password == jsonValue.Password) {
+        const parsedUser = JSON.parse(user);
+        if (loginData.Password == parsedUser.password) {
           const token = generateToken();
           console.log(token);
           dispatch(
@@ -58,14 +57,11 @@ export default function Login({ navigation }: LoginScreenProps) {
               token,
             })
           );
-    
-    
         } else {
           Alert.alert("Please check your credentials");
         }
       }
-    };
-    getData();
+
   }
   function checkEmail(key: string, value: string) {
     const emailRegex = /^[A-Za-z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

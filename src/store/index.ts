@@ -3,10 +3,11 @@ import AuthSlice from "../slice/AuthSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer } from "redux-persist";
 import persistStore from "redux-persist/es/persistStore";
+import { mmkvStorage } from "../storage/mmkvStrorage";
 
 const persistConfig = {
   key: "root",
-  storage: AsyncStorage,
+  storage: mmkvStorage,
   whitelist: ["auth"],
 };
 
