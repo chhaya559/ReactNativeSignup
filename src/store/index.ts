@@ -5,6 +5,7 @@ import createSagaMiddleware from "redux-saga";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProductsSlice from "../slice/ProductSlice";
 import RootSaga from "./saga/RootSaga";
+
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 const persistConfig = {
@@ -23,7 +24,9 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }).concat(sagaMiddleware),
+    getDefaultMiddleware({ thunk: false, serializableCheck: false }).concat(
+      sagaMiddleware
+    ),
 });
 
 sagaMiddleware.run(RootSaga);

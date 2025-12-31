@@ -18,6 +18,8 @@ import styles from "./style";
 import { SignupTypes } from "../../types/SignupTypes";
 import ThirdParty from "../../components/atoms/ThirdParty";
 import TextInput from "../../components/atoms/TextInput";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store";
 
 type SignupScreenProps = NativeStackScreenProps<RootStackParams, "Signup">;
 
@@ -31,6 +33,7 @@ export default function SignUp({ navigation }: SignupScreenProps) {
     Password: "",
     PasswordConfirm: "",
   });
+  const dispatch = useDispatch<AppDispatch>();
 
   function handleChange(prop: string, value: string) {
     setData({
@@ -72,8 +75,7 @@ export default function SignUp({ navigation }: SignupScreenProps) {
           password: data.Password,
         })
       );
-
-      navigation.navigate("Login");
+      navigation.navigate("Login")
     } catch {
       Alert.alert("Something went wrong");
     }
