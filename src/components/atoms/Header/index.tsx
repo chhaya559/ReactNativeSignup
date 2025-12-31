@@ -1,9 +1,34 @@
-import { TouchableOpacity, View } from "react-native"
+import {
+  NativeStackHeaderProps,
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
+import { TouchableOpacity, View, Text } from "react-native";
+import { RootStackParams } from "../../../types/RootStackParams";
+import { useNavigation } from "@react-navigation/native";
 
-export default function Header(){
-    return(
-        <View>
-            <TouchableOpacity></TouchableOpacity>
-        </View>
-    )
+type HeaderProps = NativeStackNavigationProp<RootStackParams>;
+export default function Header({
+  back,
+  navigation,
+  options,
+  route,
+}: NativeStackHeaderProps) {
+  //   console.log(navigation?.canGoBack(), "hsbdfjdsbfhj");
+  //   const navigation = useNavigation();
+  //   const canGoBack = navigation.canGoBack();
+  function handleBack() {
+    if (back) {
+      navigation.goBack();
+    }
+  }
+  return (
+    <View>
+      {back && (
+        <TouchableOpacity onPress={handleBack}>
+          <Text>Back</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
 }

@@ -1,13 +1,15 @@
+import React from "react";
+
 export type RootStackParams = {
   EntryScreen: undefined;
   Signup: undefined;
   Home: {
-    username ?: string;
+    username?: string;
     Email: string;
   };
   Login: undefined;
-  ForgotPassword :  undefined;
-  ChangePassword : {
-    email : string;
-  }
+  ForgotPassword: undefined;
+  ChangePassword: {
+    email: string;
+  };
 };

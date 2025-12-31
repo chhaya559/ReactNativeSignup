@@ -55,6 +55,10 @@ export default function Home({ route, navigation }: HomeProps) {
       >
         <Text style={styles.text}>Logout</Text>
       </Pressable>
+
+      <Pressable onPress={() => navigation.navigate("Pokemon")}>
+        <Text>Go to pokemon</Text>
+      </Pressable>
     </View>
   );
 }

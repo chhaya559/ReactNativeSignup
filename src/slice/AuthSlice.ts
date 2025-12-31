@@ -7,7 +7,7 @@ type User = {
 export type AuthState = {
   user: User | null;
   token: string | null;
-  isAuthenticated: boolean;
+  isAuthenticated: boolean | string;
 };
 //initialize data
 const initialState: AuthState = {

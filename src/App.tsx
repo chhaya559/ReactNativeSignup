@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { persistor, store } from "./store";
 import AppNavigator from "./navigation/AppNavigator";
 import { PersistGate } from "redux-persist/integration/react";
+import Header from "./components/atoms/Header";
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 
@@ -26,4 +27,3 @@ export default function App() {
     </Provider>
   );
 }
-

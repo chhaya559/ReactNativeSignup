@@ -86,7 +86,6 @@ export default function SignUp({ navigation }: SignupScreenProps) {
       setEmailError("This is a required field");
     } else if (!emailRegex.test(value)) {
       setEmailError("Email not valid");
-   
     }
   }
 
@@ -132,8 +131,8 @@ export default function SignUp({ navigation }: SignupScreenProps) {
           value={data.Password}
           onChangeText={(text) => {
             setMessage("");
-            handleChange("Password", text)}
-          }
+            handleChange("Password", text);
+          }}
         />
 
         <TextInput
