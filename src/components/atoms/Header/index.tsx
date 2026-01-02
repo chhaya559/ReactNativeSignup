@@ -26,7 +26,7 @@ export default function Header({
     <View>
       {back && (
         <TouchableOpacity onPress={handleBack}>
-          <Text>Back</Text>
+          <Text>Back please</Text>
         </TouchableOpacity>
       )}
     </View>
