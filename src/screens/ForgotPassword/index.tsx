@@ -24,6 +24,7 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
     const isEmail = await AsyncStorage.getItem(email);
     if (!isEmail) {
       Alert.alert("Email is not registered");
+      navigation.replace("Signup");
     }
     const otpValue = Math.ceil(Math.random() * 10000).toString();
     setgeneratedOtp(otpValue);

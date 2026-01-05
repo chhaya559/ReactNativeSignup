@@ -1,49 +1,53 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
   ActivityIndicator,
-  Button,
   FlatList,
   Pressable,
-  ScrollView,
-  SectionList,
   Text,
   View,
 } from "react-native";
 import { RootStackParams } from "../../types/RootStackParams";
 import styles from "./style";
 import { useDispatch, useSelector } from "react-redux";
-import { AuthState, logout } from "../../slice/AuthSlice";
+import { logout } from "../../slice/AuthSlice";
 import { AppDispatch, RootState } from "../../store";
-import { useEffect } from "react";
-import { fetchRequest } from "../../slice/ProductSlice";
+import { useGetProductsQuery } from "../../services/ProductsApi";
 
 type HomeProps = NativeStackScreenProps<RootStackParams, "Home">;
 
 export default function Home({ route, navigation }: HomeProps) {
-  // const user = useSelector((state: AuthState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
-  const { data, loading, error } = useSelector(
-    (state: RootState) => state.products
-  );
+  const { error, isLoading, data } = useGetProductsQuery();
 
-  useEffect(() => {
-    console.log("Dispatching...");
-    dispatch(fetchRequest());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   console.log("Dispatching...");
+  //   dispatch(fetchRequest());
+  // }, [dispatch]);
 
-  if (loading) {
+  if (isLoading) {
     return <ActivityIndicator size="large" color="#1100ff" />;
   }
   if (error) {
-    return <Text>Error : {error}</Text>;
+    return <Text>Error </Text>;
   }
+  const EmptyList = () => (
+    <View>
+      <Text>No data found</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={data}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => <Text>{item.title}</Text>}
+        data={data ?? []}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={EmptyList}
+        renderItem={({ item }) => (
+          <View>
+            <Text>{item.title}</Text>
+            <Text>{item.price}</Text>
+          </View>
+        )}
       />
 
       <Pressable
@@ -54,10 +58,6 @@ export default function Home({ route, navigation }: HomeProps) {
         }}
       >
         <Text style={styles.text}>Logout</Text>
-      </Pressable>
-
-      <Pressable onPress={() => navigation.navigate("Pokemon")}>
-        <Text>Go to pokemon</Text>
       </Pressable>
     </View>
   );
