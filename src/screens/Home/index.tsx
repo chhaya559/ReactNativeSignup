@@ -11,19 +11,26 @@ import styles from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../slice/AuthSlice";
 import { AppDispatch, RootState } from "../../store";
-import { useGetProductsQuery } from "../../services/ProductsApi";
+import { useGetProductsInfiniteQuery } from "../../services/ProductsApi";
+import ProductCard from "../../components/atoms/ProductCard";
+import { useState } from "react";
 
 type HomeProps = NativeStackScreenProps<RootStackParams, "Home">;
 
 export default function Home({ route, navigation }: HomeProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const { error, isLoading, data } = useGetProductsQuery();
+  const {
+    error,
+    data,
+    fetchNextPage,
+    isFetching,
+    isLoading,
+    refetch,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetProductsInfiniteQuery();
 
-  // useEffect(() => {
-  //   console.log("Dispatching...");
-  //   dispatch(fetchRequest());
-  // }, [dispatch]);
-
+  const productsData = data?.pages.flat() ?? [];
   if (isLoading) {
     return <ActivityIndicator size="large" color="#1100ff" />;
   }
@@ -36,18 +43,26 @@ export default function Home({ route, navigation }: HomeProps) {
     </View>
   );
 
+  function loadMore() {
+    if (!isFetchingNextPage && hasNextPage) {
+      fetchNextPage();
+    }
+  }
+  function refresh() {
+    refetch();
+  }
   return (
     <View style={styles.container}>
       <FlatList
-        data={data ?? []}
+        data={productsData}
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={EmptyList}
-        renderItem={({ item }) => (
-          <View>
-            <Text>{item.title}</Text>
-            <Text>{item.price}</Text>
-          </View>
-        )}
+        renderItem={({ item }) => <ProductCard product={item} />}
+        onEndReachedThreshold={0.5}
+        onEndReached={loadMore}
+        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
+        refreshing={isFetching && !isFetchingNextPage}
+        onRefresh={refresh}
       />
 
       <Pressable
